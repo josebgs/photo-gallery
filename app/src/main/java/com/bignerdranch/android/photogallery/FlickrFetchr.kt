@@ -1,21 +1,17 @@
 package com.bignerdranch.android.photogallery
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import api.FlickrApi
 import api.PhotoDeserializer
 import api.PhotoResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TAG = "FlickrFetchr"
-class FlickrFetchr {
+
+class FlickrFetchr { // Obsolete in this challenge. Keeping it for reference.
 
     private val flickrApi: FlickrApi
 
@@ -32,10 +28,10 @@ class FlickrFetchr {
         flickrApi = retrofit.create(FlickrApi::class.java)
     }
 
-    fun fetchPhotos(): LiveData<List<GalleryItem>>{
-        val responseLiveData: MutableLiveData<List<GalleryItem>> = MutableLiveData()
-        val flickrRequest: Call<PhotoResponse> = flickrApi.fetchPhotos()
-
+    suspend fun fetchPhotos(page: Int): List<GalleryItem>{
+        var items: List<GalleryItem> = mutableListOf()
+        val flickrRequest: Response<PhotoResponse> = flickrApi.fetchPhotos(page)
+/*
         flickrRequest.enqueue(object: Callback<PhotoResponse> {
             override fun onFailure(
                 call: Call<PhotoResponse>, //original call object
@@ -54,10 +50,10 @@ class FlickrFetchr {
                 galleryItems = galleryItems.filterNot {
                     it.url.isBlank()
                 }
-                responseLiveData.value = galleryItems
+                items = galleryItems
             }
         })
-
-        return responseLiveData
+*/
+        return items
     }
 }
