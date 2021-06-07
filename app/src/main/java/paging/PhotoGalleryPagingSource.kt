@@ -1,5 +1,6 @@
 package paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import api.FlickrApi
@@ -16,7 +17,7 @@ import java.io.IOException
  *
  * Note that the key type is Int, since we're using page number to load a page.
  */
-
+private const val TAG = "PhotoPagingSource"
 class PhotoGalleryPagingSource(private val backend: FlickrApi): PagingSource<Int, GalleryItem>() {
     override fun getRefreshKey(state: PagingState<Int, GalleryItem>): Int? {
         // Try to find the page key of the closest page to anchorPosition, from
@@ -42,7 +43,7 @@ class PhotoGalleryPagingSource(private val backend: FlickrApi): PagingSource<Int
             // Key may be null during a refresh, if no explicit key is passed into Pager
             // construction. Use 1 as default, because our API is indexed started at index 1
             val pageNumber = params.key ?: 1
-
+            Log.d(TAG, "load function called")
             // Suspending network load via Retrofit. This doesn't need to be wrapped in a
             // withContext(Dispatcher.IO) { ... } block since Retrofit's Coroutine
             // CallAdapter dispatches on a worker thread.
